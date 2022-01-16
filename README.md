@@ -1,2 +1,2 @@
 # kasis
-Kritiqual's Arch Setup &amp; Install Script
+[WIP] Kritiqual's Arch Setup &amp; Install Script
