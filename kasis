@@ -1,0 +1,74 @@
+#!/bin/bash
+#        __                  .__
+#       |  | _______    _____|__| ______
+#       |  |/ /\__  \  /  ___/  |/  ___/
+#       |    <  / __ \_\___ \|  |\___ \
+#       |__|_ \(____  /____  >__/____  >
+#            \/     \/     \/        \/
+# --------------------------------------------- #
+# Kritiqual's Arch linux Setup & Install Script #
+#      (Basically it's a fork of archfi)        #
+# --------------------------------------------- #
+# > Author: Kritiqual
+# > License:
+#     >> https://www.gnu.org/licenses/gpl-3.0.html
+#
+# > References:
+#     >> Arch linux installation guide:
+#           https://wiki.archlinux.org/title/Installation_guide
+#
+#     >> Archfi:
+#           https://github.com/MatMoul/archfi
+#           http://sourceforge.net/projects/archfi/
+#
+#     >> Arch linux Installation Framework:
+#           https://github.com/jdodds/aif
+
+### Define some variables ###
+NAME="Kritiqual's Arch linux Setup & Install Script"
+VER="kasis v.A-01"
+ANS="/tmp/kasisans"
+
+### Intro ###
+intro() {
+    whiptail --backtitle "$NAME - $VER" --title "Welcome to kasis!" \
+        --msgbox "Kritiqual's Arch linux Setup & Install Script\nis a script created by Kritiqual used to setup\nArch linux from fresh install and download more package afterward (optional)\n\nIt aims to make the process easier to both beginner and experienced users" \
+        13 50 --ok-button "Go!"
+}
+
+### Preps menu ###
+menu() {
+    prep_opts=()
+    prep_opts+=("Set keyboard layout" "")
+    prep_opts+=("Choose Editor" "(vim, nano, ...)")
+
+    PREPS=$(whiptail --backtitle "$NAME - $VER" --title "Preparation menu" \
+        --menu "  Tips: TAB to opt out of menu lists" 0 0 0 "${prep_opts[@]}" \
+        3>&1 1>&2 2>&3)
+
+    case ${PREPS} in
+    "Set keyboard layout") setkb ;;
+    "Choose Editor") chooseeditor ;;
+    esac
+}
+
+#--- Setkb menu ---#
+setkb() {
+    kblists=()
+    for i in $(ls -R /usr/share/kbd/keymaps | grep "map.gz" | sed 's/\.map\.gz//g' | sort); do
+        kblists+=("${i}" "")
+    done
+
+    KB=$(whiptail --backtitle "$NAME - $VER" --title "Choose your keyboard" \
+        --menu "  Tips: TAB to opt out of menu lists" 0 0 0 "${kblists[@]}" \
+        3>&1 1>&2 2>&3)
+
+    if [ "$?" = "0" ]; then
+        loadkeys ${KB} &
+        whiptail --backtitle "$NAME - $VER" --title "Change keyboard" \
+            --msgbox "Loaded key ${KB}" 0 0
+    fi
+}
+
+intro
+menu
