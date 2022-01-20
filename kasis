@@ -27,48 +27,76 @@
 ### Define some variables ###
 NAME="Kritiqual's Arch linux Setup & Install Script"
 VER="kasis v.A-01"
-ANS="/tmp/kasisans"
-
-### Intro ###
-intro() {
-    whiptail --backtitle "$NAME - $VER" --title "Welcome to kasis!" \
-        --msgbox "Kritiqual's Arch linux Setup & Install Script\nis a script created by Kritiqual used to setup\nArch linux from fresh install and download more package afterward (optional)\n\nIt aims to make the process easier to both beginner and experienced users" \
-        13 50 --ok-button "Go!"
-}
 
 ### Preps menu ###
 menu() {
-    prep_opts=()
-    prep_opts+=("Set keyboard layout" "")
-    prep_opts+=("Choose Editor" "(vim, nano, ...)")
+    menu_opts=()
+    menu_opts+=("About" "About kasis")
+    menu_opts+=("Set keyboard layout" "")
+    menu_opts+=("Choose Editor" "(vim, nano, ...)")
+    menu_opts+=("Reboot" "Reboot the system")
 
-    PREPS=$(whiptail --backtitle "$NAME - $VER" --title "Preparation menu" \
-        --menu "  Tips: TAB to opt out of menu lists" 0 0 0 "${prep_opts[@]}" \
-        3>&1 1>&2 2>&3)
+    chosen=$(whiptail --backtitle "$NAME - $VER" --title "Installation menu" \
+        --menu "  Tips: TAB to opt out of menu lists" 0 0 0 "${menu_opts[@]}" \
+        --default-item "Set keyboard layout" 3>&1 1>&2 2>&3)
 
-    case ${PREPS} in
-    "Set keyboard layout") setkb ;;
-    "Choose Editor") chooseeditor ;;
+    case ${chosen} in
+    "About") about ;;
+    "Set keyboard layout") kbmenu ;;
+    "Choose Editor") editormenu ;;
+    "Reboot") rebootmenu ;;
     esac
 }
 
-#--- Setkb menu ---#
-setkb() {
+#--- about ---#
+about() {
+    whiptail --backtitle "$NAME - $VER" --title "About kasis" \
+        --msgbox "Kritiqual's Arch linux Setup & Install Script\nis a script created by Kritiqual used to setup\nArch linux from fresh install and download more package afterward (optional)\n\nIt aims to make the process easier to both beginner and experienced users" \
+        13 50
+}
+
+#--- kbmenu ---#
+kbmenu() {
     kblists=()
-    for i in $(ls -R /usr/share/kbd/keymaps | grep "map.gz" | sed 's/\.map\.gz//g' | sort); do
-        kblists+=("${i}" "")
+    for kb in $(ls -R /usr/share/kbd/keymaps | grep "map.gz" | sed 's/\.map\.gz//g' | sort); do
+        kblists+=("${kb}" "")
     done
 
-    KB=$(whiptail --backtitle "$NAME - $VER" --title "Choose your keyboard" \
+    chosen=$(whiptail --backtitle "$NAME - $VER" --title "Choose your keyboard" \
         --menu "  Tips: TAB to opt out of menu lists" 0 0 0 "${kblists[@]}" \
-        3>&1 1>&2 2>&3)
+        --default-item "us" 3>&1 1>&2 2>&3)
 
     if [ "$?" = "0" ]; then
-        loadkeys ${KB} &
+        loadkeys ${chosen} &
         whiptail --backtitle "$NAME - $VER" --title "Change keyboard" \
-            --msgbox "Loaded key ${KB}" 0 0
+            --msgbox "Loaded key ${chosen}" 0 0
     fi
 }
 
-intro
+#--- editormenu ---#
+editormenu() {
+    editorlists=()
+    editorlists+=("Nano" "(Default)")
+    editorlists+=("Vim" "")
+
+    chosen=$(whiptail --backtitle "$NAME - $VER" --title "Choose your editor" \
+        --menu "  Tips: TAB to opt out of menu lists" 0 0 0 "${editorlists[@]}" \
+        --default-item "Default" 3>&1 1>&2 2>&3)
+
+    if [ "$?" = "0" ]; then
+        export EDITOR=${chosen}
+        whiptail --backtitle "$NAME - $VER" --title "Change keyboard" \
+            --msgbox "export EDITOR=${chosen}" 0 0
+    fi 
+}
+
+#--- rebootmenu ---#
+rebootmenu() {
+    if (whiptail --backtitle "$NAME - $VER" --title "Reboot" --yesno "Reboot system now?" 0 0 --defaultno); then
+        clear
+        reboot
+    fi
+}
+
+
 menu
