@@ -1,15 +1,18 @@
 [submodule "Resources/Matmoul/archfi"]
 	path = Resources/Matmoul/archfi
-	url = https://github.com/Matmoul/archfi.git
-[submodule "Resources/Matmoul/archdi-pkg"]
-	path = Resources/Matmoul/archdi-pkg
-	url = https://github.com/Matmoul/archdi-pkg.git
+	url = https://github.com/Kritiqual/archfi.git
 [submodule "Resources/Matmoul/archdi"]
 	path = Resources/Matmoul/archdi
-	url = https://github.com/Matmoul/archdi.git
+	url = https://github.com/Kritiqual/archdi.git
+[submodule "Resources/Matmoul/archdi-pkg"]
+	path = Resources/Matmoul/archdi-pkg
+	url = https://github.com/Kritiqual/archdi-pkg.git
+[submodule "Resources/aif"]
+	path = Resources/aif
+	url = https://github.com/Kritiqual/aif
 [submodule "Resources/alis"]
 	path = Resources/alis
-	url = https://github.com/picodotdev/alis.git
+	url = https://github.com/Kritiqual/alis.git
 [submodule "Resources/yais"]
 	path = Resources/yais
-	url = https://github.com/yet-another-install-script/yais.git
+	url = https://github.com/Kritiqual/yais.git
