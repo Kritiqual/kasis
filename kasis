@@ -87,7 +87,7 @@ editormenu() {
         export EDITOR=${chosen}
         whiptail --backtitle "$NAME - $VER" --title "Change keyboard" \
             --msgbox "export EDITOR=${chosen}" 0 0
-    fi 
+    fi
 }
 
 #--- rebootmenu ---#
@@ -99,4 +99,6 @@ rebootmenu() {
 }
 
 
-menu
+while true; do
+    menu
+done
